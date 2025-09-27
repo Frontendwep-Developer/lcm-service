@@ -6,9 +6,10 @@
   from = "/xolmominovdilshodbek4_gmail_com"
   to = "/.netlify/functions/lcm"
   status = 200
+  force = true
 
-[[headers]]
-  for = "/.netlify/functions/lcm"
-  [headers.values]
-    Content-Type = "text/plain"
-    Cache-Control = "no-cache"
+[[redirects]]
+  from = "/xolmominovdilshodbek4_gmail_com/*"
+  to = "/.netlify/functions/lcm"
+  status = 200
+  force = true
