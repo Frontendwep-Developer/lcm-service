@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// Shartga mos yo'l: /something/xolmominovdilshodbek4_gmail_com
-app.get('/api/xolmominovdilshodbek4_gmail_com', (req, res) => {
+// To'g'ri yo'l: /app/xolmominovdilshodbek4_gmail_com
+app.get('/app/xolmominovdilshodbek4_gmail_com', (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
 
     const x = parseInt(req.query.x);
