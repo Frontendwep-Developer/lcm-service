@@ -2,31 +2,33 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// Cache ni to'liq o'chirish
+// Hech qanday middleware, faqat kerakli kod
 app.get('/xolmominovdilshodbek4_gmail_com', (req, res) => {
+    // Avval headers ni o'rnatamiz
     res.setHeader('Content-Type', 'text/plain');
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
 
+    // Parametrlarni olish
     const x = parseInt(req.query.x);
     const y = parseInt(req.query.y);
 
+    // Natural son tekshirish
     if (isNaN(x) || isNaN(y) || x < 1 || y < 1) {
         return res.send('NaN');
     }
 
-    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
-    const lcm = (x * y) / gcd(x, y);
+    // LCM hisoblash
+    function calculateLCM(a, b) {
+        function gcd(x, y) {
+            return y === 0 ? x : gcd(y, x % y);
+        }
+        return (a * b) / gcd(a, b);
+    }
 
-    res.send(lcm.toString());
+    const result = calculateLCM(x, y);
+    res.send(result.toString());
 });
 
-app.get('/', (req, res) => {
-    res.setHeader('Content-Type', 'text/plain');
-    res.send('Server is ready');
-});
-
+// Boshqa hech narsa yo'q
 app.listen(PORT, () => {
-    console.log(`Server ${PORT} da ishlamoqda`);
+    console.log('Server ishga tushdi');
 });
