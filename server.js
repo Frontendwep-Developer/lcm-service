@@ -1,41 +1,38 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;  // ✅ Heroku uchun o'zgartirildi
+const PORT = process.env.PORT || 3000;
 
-function calculateLCM(a, b) {
-    function gcd(x, y) {
-        if (y === 0) return x;
-        return gcd(y, x % y);
-    }
-    return (a * b) / gcd(a, b);
-}
-
+// Hech qanday HTML, faqat plain text
 app.get('/xolmominovdilshodbek4_gmail_com', (req, res) => {
+    // Avval Content-Type ni o'rnatamiz
     res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Cache-Control', 'no-store');
 
     const x = parseInt(req.query.x);
     const y = parseInt(req.query.y);
 
+    console.log('Request:', x, y); // Log qo'shamiz
+
+    // Natural son tekshirish
     if (isNaN(x) || isNaN(y) || x < 1 || y < 1) {
+        console.log('NaN qaytarilyapti');
         return res.send('NaN');
     }
 
-    const lcm = calculateLCM(x, y);
-    res.send(lcm.toString());
+    // LCM hisoblash
+    function calculateLCM(a, b) {
+        function gcd(x, y) {
+            return y === 0 ? x : gcd(y, x % y);
+        }
+        return (a * b) / gcd(a, b);
+    }
+
+    const result = calculateLCM(x, y).toString();
+    console.log('Result:', result);
+    res.send(result);
 });
 
-app.get('/', (req, res) => {
-    res.send(`
-        <h1>LCM Service - Xolmominov Dilshodbek</h1>
-        <p>Email: xolmominovdilshodbek4@gmail.com</p>
-        <h3>Testlar:</h3>
-        <ul>
-            <li><a href="/xolmominovdilshodbek4_gmail_com?x=4&y=6">/xolmominovdilshodbek4_gmail_com?x=4&y=6</a> (12)</li>
-            <li><a href="/xolmominovdilshodbek4_gmail_com?x=5&y=7">/xolmominovdilshodbek4_gmail_com?x=5&y=7</a> (35)</li>
-        </ul>
-    `);
-});
-
+// Boshqa HECH QANDAY route QO'YMAYMIZ!
 app.listen(PORT, () => {
-    console.log(`✅ Server ${PORT} portda ishlamoqda`);
+    console.log(`Server ${PORT} da ishlamoqda`);
 });
