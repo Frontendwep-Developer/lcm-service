@@ -1,41 +1,35 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
-// LCM funksiyasi
-const calculateLCM = (a, b) => {
-    const gcd = (x, y) => y === 0 ? x : gcd(y, x % y);
-    return (a * b) / gcd(a, b);
-};
-
-// Asosiy endpoint
+// Hech qanday HTML, faqat plain text
 app.get('/xolmominovdilshodbek4_gmail_com', (req, res) => {
-    // Headers
+    // Avval Content-Type ni o'rnatamiz
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Cache-Control', 'no-cache');
 
-    try {
-        // Parametrlarni olish
-        const x = parseInt(req.query.x, 10);
-        const y = parseInt(req.query.y, 10);
+    const x = parseInt(req.query.x);
+    const y = parseInt(req.query.y);
 
-        // Natural son tekshirish (1, 2, 3, ...)
-        if (!Number.isInteger(x) || !Number.isInteger(y) || x < 1 || y < 1) {
-            return res.send('NaN');
-        }
-
-        // LCM hisoblash
-        const lcm = calculateLCM(x, y);
-
-        // Faqat raqam qaytarish
-        return res.send(lcm.toString());
-
-    } catch (error) {
+    // Natural son tekshirish
+    if (isNaN(x) || isNaN(y) || x < 1 || y < 1) {
         return res.send('NaN');
     }
+
+    // LCM hisoblash
+    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+    const lcm = (x * y) / gcd(x, y);
+
+    // Faqat raqam qaytarish
+    res.send(lcm.toString());
 });
 
-// Boshqa hech qanday route YO'Q
+// Root yo'lini olib tashlaymiz yoki plain text qilamiz
+app.get('/', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain');
+    res.send('Use: /xolmominovdilshodbek4_gmail_com?x=4&y=6');
+});
+
 app.listen(PORT, () => {
     console.log(`Server ${PORT} da ishlamoqda`);
 });
