@@ -1,24 +1,40 @@
-const express = require('express');
-const app = express();
+const http = require('http');
+const url = require('url');
 const PORT = process.env.PORT || 10000;
 
-// To'g'ri yo'l: /app/xolmominovdilshodbek4_gmail_com
-app.get('/app/xolmominovdilshodbek4_gmail_com', (req, res) => {
-    res.setHeader('Content-Type', 'text/plain');
+const server = http.createServer((req, res) => {
+    const parsedUrl = url.parse(req.url, true);
 
-    const x = parseInt(req.query.x);
-    const y = parseInt(req.query.y);
+    // Yo'lni tekshirish
+    if (req.method === 'GET' && parsedUrl.pathname === '/app/xolmominovdilshodbek4_gmail_com') {
+        const x = parseInt(parsedUrl.query.x);
+        const y = parseInt(parsedUrl.query.y);
 
-    if (isNaN(x) || isNaN(y) || x < 1 || y < 1) {
-        return res.send('NaN');
+        // Headers ni aniq o'rnatish
+        res.setHeader('Content-Type', 'text/plain');
+        res.setHeader('Cache-Control', 'no-cache');
+
+        // Natural son tekshirish
+        if (isNaN(x) || isNaN(y) || x < 1 || y < 1) {
+            res.end('NaN');
+            return;
+        }
+
+        // LCM hisoblash
+        const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+        const lcm = (x * y) / gcd(x, y);
+
+        // Faqat raqam qaytarish
+        res.end(lcm.toString());
+        return;
     }
 
-    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
-    const lcm = (x * y) / gcd(x, y);
-
-    res.send(lcm.toString());
+    // Boshqa yo'llar uchun
+    res.statusCode = 404;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Not Found');
 });
 
-app.listen(PORT, () => {
-    console.log(`Server ${PORT} da ishlamoqda`);
+server.listen(PORT, () => {
+    console.log('Server ishlamoqda');
 });
