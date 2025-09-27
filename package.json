@@ -1,5 +1,7 @@
 {
-  "dependencies": {
-    "express": "^5.1.0"
+  "name": "lcm-service",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Build complete'"
   }
 }
