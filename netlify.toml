@@ -6,3 +6,9 @@
   from = "/xolmominovdilshodbek4_gmail_com"
   to = "/.netlify/functions/lcm"
   status = 200
+
+[[headers]]
+  for = "/.netlify/functions/lcm"
+  [headers.values]
+    Content-Type = "text/plain"
+    Cache-Control = "no-cache"

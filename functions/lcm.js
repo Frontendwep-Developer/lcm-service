@@ -1,24 +1,18 @@
-exports.handler = async (event, context) => {
-    // Faqat GET so'rovlarni qabul qilish
+exports.handler = async (event) => {
+    // Faqat GET so'rov
     if (event.httpMethod !== 'GET') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
     // Parametrlarni olish
-    const x = parseInt(event.queryStringParameters.x);
-    const y = parseInt(event.queryStringParameters.y);
+    const { x, y } = event.queryStringParameters;
 
-    // LCM funksiyasi
-    function calculateLCM(a, b) {
-        function gcd(x, y) {
-            if (y === 0) return x;
-            return gcd(y, x % y);
-        }
-        return (a * b) / gcd(a, b);
-    }
+    // Sonlarga o'tkazish
+    const numX = parseInt(x);
+    const numY = parseInt(y);
 
     // Natural son tekshirish
-    if (isNaN(x) || isNaN(y) || x < 1 || y < 1) {
+    if (isNaN(numX) || isNaN(numY) || numX < 1 || numY < 1) {
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'text/plain' },
@@ -26,12 +20,16 @@ exports.handler = async (event, context) => {
         };
     }
 
-    // Hisoblash
-    const lcm = calculateLCM(x, y);
+    // LCM hisoblash
+    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+    const lcm = (numX * numY) / gcd(numX, numY);
 
     return {
         statusCode: 200,
-        headers: { 'Content-Type': 'text/plain' },
+        headers: {
+            'Content-Type': 'text/plain',
+            'Cache-Control': 'no-cache'
+        },
         body: lcm.toString()
     };
 };
